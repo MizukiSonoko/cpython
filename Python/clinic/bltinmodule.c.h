@@ -48,16 +48,22 @@ PyDoc_STRVAR(builtin_ascii__doc__,
     {"ascii", (PyCFunction)builtin_ascii, METH_O, builtin_ascii__doc__},
 
 PyDoc_STRVAR(builtin_bin__doc__,
-"bin($module, number, /)\n"
+"bin($module, number, bit_size=None/)\n"
 "--\n"
 "\n"
 "Return the binary representation of an integer.\n"
 "\n"
 "   >>> bin(2796202)\n"
-"   \'0b1010101010101010101010\'");
+"   \'0b1010101010101010101010\'\n"
+"\n"
+"if it_size is not None, \n"
+"Return the negative number that assumed the bit_size top bit.\n"
+"\n"
+"   >>> bin( -12, 8)\n"
+"   \'0b11110100\'");
 
 #define BUILTIN_BIN_METHODDEF    \
-    {"bin", (PyCFunction)builtin_bin, METH_O, builtin_bin__doc__},
+    {"bin", (PyCFunction)builtin_bin, METH_VARARGS, builtin_bin__doc__},
 
 PyDoc_STRVAR(builtin_callable__doc__,
 "callable($module, obj, /)\n"

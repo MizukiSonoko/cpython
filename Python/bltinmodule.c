@@ -378,13 +378,33 @@ Return the binary representation of an integer.
 
    >>> bin(2796202)
    '0b1010101010101010101010'
+
+if bit_size is not -1,
+Return the negative number that assumed the bit_size top bit.
+
+   >>> bin(-5,4)\n"
+   '0b1011'
 [clinic start generated code]*/
 
 static PyObject *
-builtin_bin(PyModuleDef *module, PyObject *number)
+builtin_bin(PyModuleDef *module, PyObject *args)
 /*[clinic end generated code: output=25ee26c6cf3bbb54 input=53f8a0264bacaf90]*/
 {
-    return PyNumber_ToBase(number, 2);
+    PyObject *number;
+    PyObject *bit_size = Py_None;
+
+    if(!PyArg_UnpackTuple(args, "bin", 1, 2, &number, &bit_size))
+        return NULL;
+
+    // if number < 0 and bit_size != None, It will return twos complement.
+    if(bit_size != Py_None && PyObject_RichCompareBool( number, PyLong_FromLong(0), Py_LT))
+        return PyNumber_ToBase(
+            PyNumber_Subtract(
+                PyNumber_Power(PyLong_FromLong(2), bit_size, Py_None),
+                PyNumber_Negative(number))
+            , 2);
+
+    return PyNumber_ToBase( number, 2);
 }
 
 
